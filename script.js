@@ -27,9 +27,16 @@ function makePageForEpisodes(episodeList) {
   const episodePic  =  movTemplate.querySelector("img");
   episodePic.src = episodeList.image.medium;
 
+  //adding credit link to original 
+  const epiSource = movTemplate.querySelector("a");
+  epiSource.href = "https://www.tvmaze.com/";
+  epiSource.textContent = "TVMaze"
+
   //adding info 
   const episodeSummary = movTemplate.querySelector("p");
   episodeSummary.innerHTML = episodeList.summary;
+
+
 
 
  return movTemplate;
