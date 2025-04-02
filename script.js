@@ -6,6 +6,11 @@ function setup() {
   //append all the return value to the body
   document.body.append(...allEpisodes);
 
+  const footer = document.createElement("footer");
+  footer.innerHTML = "<h4>Data For This page provided by TVMaze</h4>";
+  document.body.appendChild(footer);
+  
+
 }
 
 
@@ -36,13 +41,63 @@ function makePageForEpisodes(episodeList) {
   const episodeSummary = movTemplate.querySelector("p");
   episodeSummary.innerHTML = episodeList.summary;
 
-
-
-
  return movTemplate;
+
 
 }
 
+// search box 
+
+// state for search 
+const state = {
+  // films array to filter 
+      films : getAllEpisodes(),
+  
+      // search key word from search box
+      searchTerm : "",
+  
+  };
+  // filter the film & render content for the display 
+  
+  function render()
+  {
+     const fliteredFilm = state.films.filter(function(flim){
+        return   flim.name.toLowerCase().includes(state.searchTerm.toLowerCase());
+      
+     });
+     
+  
+     const episode = fliteredFilm.map(makePageForEpisodes)
+     document.getElementById('flimContainer').append(...episode);
+  }
+  
+  //call the render 
+  render();
+  
+  // link the input from the search box to film array
+  // 1. get the input from the search box.
+  // 2. link the input to the search value.
+  
+  // selecting input element 
+  const searchValue = document.querySelector("input");
+  
+  //capture the value while input type in search box
+  searchValue.addEventListener('keyup',function() {
+  
+   //update the search value with the data in input text box
+   state.searchTerm = searchValue.value;
+  
+   // clear the previous flim content
+   document.getElementById('flimContainer').innerHTML = '';
+  
+   // call the render
+   render();
+  });
+  
+  
+// list box
+
+// get the 
 
 
 

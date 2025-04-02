@@ -1,7 +1,5 @@
 body {
-
-  display:flex;
-  flex-wrap: wrap;
+ 
   background-color: rgb(44, 46, 46);
   margin-left: 80px; 
   color: rgb(243, 252, 252);
@@ -11,7 +9,7 @@ section {
   margin: 7px;
   border-radius: 10px;
   background-color: rgb(56, 62, 62);
-  width: 100%;
+  width: 90%;
   height: 400px;
   text-align: center;
 }

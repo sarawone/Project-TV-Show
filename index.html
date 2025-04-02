@@ -20,7 +20,20 @@
         </section>
       </template>
 
-     <main></main> 
+      <!-- adding search box-->
+      <label>
+        Search <input type ="search" id = 'search' name ='search' placeholder="Search"></input>
+     </label>
+
+     <!-- adding dropdown list-->
+     <label>
+      Choose Season & Episode 
+      <select id ='mov-dropdown'>
+          <option value = "">Select season & Episode</option>
+      </select>
+  </label>
+
+     <main id ='flimContainer'></main> 
 
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <script defer src="episodes.js"></script>
@@ -29,8 +42,6 @@
     <script defer src="script.js"></script>
 
       <!--adding credit to origin data source -->
-    <footer>
-      <h4>Data For This page provide by TVMaze</h4>
-    </footer> 
+
   </body>
 </html>
