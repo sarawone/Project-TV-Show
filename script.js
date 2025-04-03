@@ -55,6 +55,7 @@ const state = {
   
       // search key word from search box
       searchTerm : "",
+      selectOption : "option1"
   
   };
   // filter the film & render content for the display 
@@ -65,14 +66,28 @@ const state = {
         return   flim.name.toLowerCase().includes(state.searchTerm.toLowerCase());
       
      });
-     
-  
      const episode = fliteredFilm.map(makePageForEpisodes)
      document.getElementById('flimContainer').append(...episode);
+
+     // select box
+     //1. adding new title in the array 
+     //2. load the new title into the select box option
+
+     const selectFilm = state.films.map(select => {
+
+      const epiSeason = "S"+String(select.season).padStart(2,"0");
+      //adding 0 inforont of the episode number 
+      const epiNumber = "E"+String (select.number).padStart(2,"0"); 
+      select.title =  epiSeason + epiNumber + '-'+ select.name;
+
+     })
+     
+
   }
+// display the initial display
+  render() ;
   
-  //call the render 
-  render();
+
   
   // link the input from the search box to film array
   // 1. get the input from the search box.
@@ -94,12 +109,5 @@ const state = {
    render();
   });
   
-  
-// list box
-
-// get the 
-
-
-
 
 window.onload = setup;
