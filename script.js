@@ -13,7 +13,7 @@ function setup() {
 
 }
 
-
+// creating the content of each episode
 function makePageForEpisodes(episodeList) {
 
   //clone template 
@@ -46,7 +46,7 @@ function makePageForEpisodes(episodeList) {
 
 }
 
-// search box 
+// search box  & Select box (level 200)
 
 // state for search 
 const state = {
@@ -55,21 +55,11 @@ const state = {
   
       // search key word from search box
       searchTerm : "",
-      selectOption : "option1"
+      selectOption : ""
   
   };
-  // filter the film & render content for the display 
-  
-  function render()
-  {
-     const fliteredFilm = state.films.filter(function(flim){
-        return   flim.name.toLowerCase().includes(state.searchTerm.toLowerCase());
-      
-     });
-     const episode = fliteredFilm.map(makePageForEpisodes)
-     document.getElementById('flimContainer').append(...episode);
 
-     // select box
+     // Creating elect box
      //1. adding new title in the array 
      //2. load the new title into the select box option
 
@@ -80,15 +70,59 @@ const state = {
       const epiNumber = "E"+String (select.number).padStart(2,"0"); 
       select.title =  epiSeason + epiNumber + '-'+ select.name;
 
-     })
-     
+      return select;
+     });
+
+     // getting DOM element for select
+
+      const selectEpi = document.getElementById('mov-dropdown');
+  // filter the film & render content for the display 
+
+        //clear the previous option 
+       // selectEpi.innerHTML='';
+
+        //create option and load each title 
+  
+        selectFilm.forEach(element => {
+  
+          const option= document.createElement('option');
+          option.value = element.title;
+          option.textContent = element.title;
+  
+          selectEpi.appendChild(option);
+          
+       })
+  
+  function render()
+  {
+     // filter film base on the search term.
+     const fliteredFilm = state.films.filter(function(flim){
+        return   flim.name.toLowerCase().includes(state.searchTerm.toLowerCase());
+      
+     });
+
+     // clear the  template before adding content
+   document.getElementById('flimContainer').innerHTML = '';
+
+    const episode = fliteredFilm.map(makePageForEpisodes)
+    document.getElementById('flimContainer').append(...episode);
+
+
+
+   const selectEpisode = state.films.find( flim => flim.title === state.selectOption);
+
+   if(selectEpisode)
+   {
+
+    document.getElementById('flimContainer').innerHTML = '';
+
+    const selection = makePageForEpisodes(selectEpisode);
+    document.getElementById('flimContainer').append(selection); 
+   } 
 
   }
-// display the initial display
-  render() ;
   
 
-  
   // link the input from the search box to film array
   // 1. get the input from the search box.
   // 2. link the input to the search value.
@@ -101,13 +135,25 @@ const state = {
   
    //update the search value with the data in input text box
    state.searchTerm = searchValue.value;
+   state.selectOption ="option1"
+   render();
+  })
+
   
    // clear the previous flim content
+   //document.getElementById('flimContainer').innerHTML = '';
+
+  const selectValue = document.querySelector("select");
+
+   selectValue.addEventListener('change',function(){
+   state.selectOption = selectValue.value;
+
    document.getElementById('flimContainer').innerHTML = '';
+
+    render();
+   })
+   
   
-   // call the render
-   render();
-  });
-  
+
 
 window.onload = setup;
