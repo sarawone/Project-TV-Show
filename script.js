@@ -2,158 +2,140 @@
 function setup() {
   // get all episodes array & loop each one
   const allEpisodes = getAllEpisodes().map(makePageForEpisodes);
-  
+
   //append all the return value to the body
   document.body.append(...allEpisodes);
 
   const footer = document.createElement("footer");
   footer.innerHTML = "<h4>Data For This page provided by TVMaze</h4>";
   document.body.appendChild(footer);
-  
-
 }
 
 // creating the content of each episode
 function makePageForEpisodes(episodeList) {
-
-  //clone template 
+  //clone template
   const movTemplate = document.getElementById("card").content.cloneNode(true);
-  
-  // adding title 
-  const episodeTitle  = movTemplate.querySelector("h3");
 
-  // padding 0 infront of season 
-  const epiSeason = "S"+String(episodeList.season).padStart(2,"0");
-  //adding 0 inforont of the episode number 
-  const epiNumber = "E"+String (episodeList.number).padStart(2,"0"); 
-  episodeTitle.textContent = episodeList.name + '-' + epiSeason + epiNumber;
+  // adding title
+  const episodeTitle = movTemplate.querySelector("h3");
 
-  //adding image 
-  const episodePic  =  movTemplate.querySelector("img");
+  // padding 0 infront of season
+  const epiSeason = "S" + String(episodeList.season).padStart(2, "0");
+  //adding 0 inforont of the episode number
+  const epiNumber = "E" + String(episodeList.number).padStart(2, "0");
+  episodeTitle.textContent = episodeList.name + "-" + epiSeason + epiNumber;
+
+  //adding image
+  const episodePic = movTemplate.querySelector("img");
   episodePic.src = episodeList.image.medium;
 
-  //adding credit link to original 
+  //adding credit link to original
   const epiSource = movTemplate.querySelector("a");
   epiSource.href = "https://www.tvmaze.com/";
-  epiSource.textContent = "TVMaze"
+  epiSource.textContent = "TVMaze";
 
-  //adding info 
+  //adding info
   const episodeSummary = movTemplate.querySelector("p");
   episodeSummary.innerHTML = episodeList.summary;
 
- return movTemplate;
-
-
+  return movTemplate;
 }
 
 // search box  & Select box (level 200)
 
-// state for search 
+// state for search
 const state = {
-  // films array to filter 
-      films : getAllEpisodes(),
-  
-      // search key word from search box
-      searchTerm : "",
-      selectOption : ""
-  
-  };
+  // films array to filter
+  films: getAllEpisodes(),
 
-     // Creating elect box
-     //1. adding new title in the array 
-     //2. load the new title into the select box option
+  // search key word from search box
+  searchTerm: "",
+  selectOption: "",
+};
 
-     const selectFilm = state.films.map(select => {
+// Creating elect box
+//1. adding new title in the array
+//2. load the new title into the select box option
 
-      const epiSeason = "S"+String(select.season).padStart(2,"0");
-      //adding 0 inforont of the episode number 
-      const epiNumber = "E"+String (select.number).padStart(2,"0"); 
-      select.title =  epiSeason + epiNumber + '-'+ select.name;
+const selectFilm = state.films.map((select) => {
+  const epiSeason = "S" + String(select.season).padStart(2, "0");
+  //adding 0 inforont of the episode number
+  const epiNumber = "E" + String(select.number).padStart(2, "0");
+  select.title = epiSeason + epiNumber + "-" + select.name;
 
-      return select;
-     });
+  return select;
+});
 
-     // getting DOM element for select
+// getting DOM element for select
 
-      const selectEpi = document.getElementById('mov-dropdown');
-  // filter the film & render content for the display 
+const selectEpi = document.getElementById("mov-dropdown");
+// filter the film & render content for the display
 
-        //clear the previous option 
-       // selectEpi.innerHTML='';
+//clear the previous option
+// selectEpi.innerHTML='';
 
-        //create option and load each title 
-  
-        selectFilm.forEach(element => {
-  
-          const option= document.createElement('option');
-          option.value = element.title;
-          option.textContent = element.title;
-  
-          selectEpi.appendChild(option);
-          
-       })
-  
-  function render()
-  {
-     // filter film base on the search term.
-     const fliteredFilm = state.films.filter(function(flim){
-        return   flim.name.toLowerCase().includes(state.searchTerm.toLowerCase());
-      
-     });
+//create option and load each title
 
-     // clear the  template before adding content
-   document.getElementById('flimContainer').innerHTML = '';
+selectFilm.forEach((element) => {
+  const option = document.createElement("option");
+  option.value = element.title;
+  option.textContent = element.title;
 
-    const episode = fliteredFilm.map(makePageForEpisodes)
-    document.getElementById('flimContainer').append(...episode);
+  selectEpi.appendChild(option);
+});
 
+function render() {
+  // filter film base on the search term.
+  const fliteredFilm = state.films.filter(function (flim) {
+    return flim.name.toLowerCase().includes(state.searchTerm.toLowerCase());
+  });
 
+  // clear the  template before adding content
+  document.getElementById("flimContainer").innerHTML = "";
 
-   const selectEpisode = state.films.find( flim => flim.title === state.selectOption);
+  const episode = fliteredFilm.map(makePageForEpisodes);
+  document.getElementById("flimContainer").append(...episode);
 
-   if(selectEpisode)
-   {
+  const selectEpisode = state.films.find(
+    (flim) => flim.title === state.selectOption
+  );
 
-    document.getElementById('flimContainer').innerHTML = '';
+  if (selectEpisode) {
+    document.getElementById("flimContainer").innerHTML = "";
 
     const selection = makePageForEpisodes(selectEpisode);
-    document.getElementById('flimContainer').append(selection); 
-   } 
-
+    document.getElementById("flimContainer").append(selection);
   }
-  
+}
 
-  // link the input from the search box to film array
-  // 1. get the input from the search box.
-  // 2. link the input to the search value.
-  
-  // selecting input element 
-  const searchValue = document.querySelector("input");
-  
-  //capture the value while input type in search box
-  searchValue.addEventListener('keyup',function() {
-  
-   //update the search value with the data in input text box
-   state.searchTerm = searchValue.value;
-   state.selectOption ="option1"
-   render();
-  })
+// link the input from the search box to film array
+// 1. get the input from the search box.
+// 2. link the input to the search value.
 
-  
-   // clear the previous flim content
-   //document.getElementById('flimContainer').innerHTML = '';
+// selecting input element
+const searchValue = document.querySelector("input");
 
-  const selectValue = document.querySelector("select");
+//capture the value while input type in search box
+searchValue.addEventListener("keyup", function () {
+  //update the search value with the data in input text box
+  state.searchTerm = searchValue.value;
+  state.selectOption = "option1";
+  render();
+});
 
-   selectValue.addEventListener('change',function(){
-   state.selectOption = selectValue.value;
+// clear the previous flim content
+//document.getElementById('flimContainer').innerHTML = '';
 
-   document.getElementById('flimContainer').innerHTML = '';
+const selectValue = document.querySelector("select");
 
-    render();
-   })
-   
-  
+selectValue.addEventListener("change", function () {
+  state.selectOption = selectValue.value;
 
+  document.getElementById("flimContainer").innerHTML = "";
+
+  render();
+});
+
+console.log(`test`);
 
 window.onload = setup;
