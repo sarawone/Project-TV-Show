@@ -9,38 +9,20 @@
   </head>
 
   <body>
+    <header>
+      <h1>TV Show </h1>
+    </header>
    
+    <main id ='episodes-container'></main> 
 
-      <template id="card" >
-        <section >
-          <h3></h3>
-          <img>
-          <p></p>
-          <a></a>
-        </section>
-      </template>
-
-      <!-- adding search box-->
-      <label>
-        Search <input type ="search" id = 'search' name ='search' placeholder="Search"></input>
-     </label>
-
-     <!-- adding dropdown list-->
-      <label>
-        Choose Series 
-        <select id ='seri-dropdown'>
-            <option value="option1">Select Series</option>
-        </select>
-      </label>
-     <label>
-      Choose Season & Episode 
-      <select id ='mov-dropdown'>
-          <option value = "option1">Select season & Episode</option>
-      </select>
-  </label>
-
-     <main id ='flimContainer'></main> 
-
+    <footer>
+      <p>
+        Data provided by
+        <a href="https://www.tvmaze.com/api#licensing">
+          TVMaze.com
+        </a>
+      </p>
+    </footer>
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <script defer src="episodes.js"></script>
 

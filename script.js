@@ -1,159 +1,55 @@
 //You can edit ALL of the code here
 function setup() {
-  // get all episodes array & loop each one
-  const allEpisodes = getAllEpisodes().map(makePageForEpisodes);
+
+   // show the content as soon as the page load 
+   renderEpisodes();
   
-  //append all the return value to the body
-  document.body.append(...allEpisodes);
+  }
 
-  const footer = document.createElement("footer");
-  footer.innerHTML = "<h4>Data For This page provided by TVMaze</h4>";
-  document.body.appendChild(footer);
-  
-
-}
-
-// creating the content of each episode
-function makePageForEpisodes(episodeList) {
-
-  //clone template 
-  const movTemplate = document.getElementById("card").content.cloneNode(true);
-  
-  // adding title 
-  const episodeTitle  = movTemplate.querySelector("h3");
-
-  // padding 0 infront of season 
-  const epiSeason = "S"+String(episodeList.season).padStart(2,"0");
-  //adding 0 inforont of the episode number 
-  const epiNumber = "E"+String (episodeList.number).padStart(2,"0"); 
-  episodeTitle.textContent = episodeList.name + '-' + epiSeason + epiNumber;
-
-  //adding image 
-  const episodePic  =  movTemplate.querySelector("img");
-  episodePic.src = episodeList.image.medium;
-
-  //adding credit link to original 
-  const epiSource = movTemplate.querySelector("a");
-  epiSource.href = "https://www.tvmaze.com/";
-  epiSource.textContent = "TVMaze"
-
-  //adding info 
-  const episodeSummary = movTemplate.querySelector("p");
-  episodeSummary.innerHTML = episodeList.summary;
-
- return movTemplate;
-
-
-}
-
-// search box  & Select box (level 200)
-
-// state for search 
-const state = {
-  // films array to filter 
-      films : getAllEpisodes(),
-  
-      // search key word from search box
-      searchTerm : "",
-      selectOption : ""
-  
-  };
-
-     // Creating elect box
-     //1. adding new title in the array 
-     //2. load the new title into the select box option
-
-     const selectFilm = state.films.map(select => {
-
-      const epiSeason = "S"+String(select.season).padStart(2,"0");
-      //adding 0 inforont of the episode number 
-      const epiNumber = "E"+String (select.number).padStart(2,"0"); 
-      select.title =  epiSeason + epiNumber + '-'+ select.name;
-
-      return select;
-     });
-
-     // getting DOM element for select
-
-      const selectEpi = document.getElementById('mov-dropdown');
-  // filter the film & render content for the display 
-
-        //clear the previous option 
-       // selectEpi.innerHTML='';
-
-        //create option and load each title 
-  
-        selectFilm.forEach(element => {
-  
-          const option= document.createElement('option');
-          option.value = element.title;
-          option.textContent = element.title;
-  
-          selectEpi.appendChild(option);
-          
-       })
-  
-  function render()
-  {
-     // filter film base on the search term.
-     const fliteredFilm = state.films.filter(function(flim){
-        return   flim.name.toLowerCase().includes(state.searchTerm.toLowerCase());
-      
-     });
-
-     // clear the  template before adding content
-   document.getElementById('flimContainer').innerHTML = '';
-
-    const episode = fliteredFilm.map(makePageForEpisodes)
-    document.getElementById('flimContainer').append(...episode);
-
-
-
-   const selectEpisode = state.films.find( flim => flim.title === state.selectOption);
-
-   if(selectEpisode)
-   {
-
-    document.getElementById('flimContainer').innerHTML = '';
-
-    const selection = makePageForEpisodes(selectEpisode);
-    document.getElementById('flimContainer').append(selection); 
-   } 
-
+// format the season & episode 
+function formatEpisodeCode(season, number) {
+    const seasonNumber = String(season).padStart(2, '0');
+    const epiNumber = String(number).padStart(2, '0');
+    return `S${seasonNumber}E${epiNumber}`;
   }
   
-
-  // link the input from the search box to film array
-  // 1. get the input from the search box.
-  // 2. link the input to the search value.
+  // build and insert episode
+  function renderEpisodes() {
+    const container = document.getElementById('episodes-container');
+    getAllEpisodes().forEach(ep => {
+      // adding article 
+      const article = document.createElement('article');
+      article.classList.add('episode');
   
-  // selecting input element 
-  const searchValue = document.querySelector("input");
+      // adding header & paragraph
+      const hdr = document.createElement('header');
+      const codeEl = document.createElement('p');
+      codeEl.classList.add('episode-code');
+      codeEl.textContent = `${ep.name}-${formatEpisodeCode(ep.season, ep.number)}`;
+
+      hdr.append(codeEl);
   
-  //capture the value while input type in search box
-  searchValue.addEventListener('keyup',function() {
+      // adding image
+      const fig = document.createElement('figure');
+      const link = document.createElement('a');
+      link.href = ep.url;
+      const img = document.createElement('img');
+      img.src = ep.image.medium;
+      img.alt = ep.name;
+      link.appendChild(img);
   
-   //update the search value with the data in input text box
-   state.searchTerm = searchValue.value;
-   state.selectOption ="option1"
-   render();
-  })
-
+      fig.append(link);
   
-   // clear the previous flim content
-   //document.getElementById('flimContainer').innerHTML = '';
-
-  const selectValue = document.querySelector("select");
-
-   selectValue.addEventListener('change',function(){
-   state.selectOption = selectValue.value;
-
-   document.getElementById('flimContainer').innerHTML = '';
-
-    render();
-   })
-   
+      // adding section for summary
+      const summarySec = document.createElement('section');
+      summarySec.classList.add('episode-summary');
+      summarySec.innerHTML = ep.summary;
   
+      //appending tags
+      article.append(hdr, fig, summarySec);
+      container.appendChild(article);
+    });
+  }
 
-
-window.onload = setup;
+  window.onload = setup;
+  
