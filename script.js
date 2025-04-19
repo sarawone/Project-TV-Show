@@ -5,7 +5,6 @@ function setup() {
    renderEpisodes();
   
   }
-
 // format the season & episode 
 function formatEpisodeCode(season, number) {
     const seasonNumber = String(season).padStart(2, '0');
@@ -13,7 +12,7 @@ function formatEpisodeCode(season, number) {
     return `S${seasonNumber}E${epiNumber}`;
   }
   
-  // build and insert episode
+  // build and insert episodes
   function renderEpisodes() {
     const container = document.getElementById('episodes-container');
     getAllEpisodes().forEach(ep => {
