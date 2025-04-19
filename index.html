@@ -1,38 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TV Show Project |sarawone </title>
-    <link href="style.css" rel="stylesheet" />
-    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-  </head>
 
-  <body>
-    <header>
-      <h1>TV Show </h1>
-    </header>
-    <main>
-      <section id="episodes-container" class="episodes-container" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TV Show Project |sarawone </title>
+  <link href="level200.css" rel="stylesheet" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+</head>
+
+<body>
+
+  <header>
+    <h1>TV Show </h1>
+  </header>
+
+  <main>
+    <!-- search box and select box section-->
+    <section id="controls">
+      <label for="search-input">Search Episodes:</label>
+      <input type="search" id="search-input" placeholder="Search by name or summary" />
+
+      <label for="episode-select">Jump to episode:</label>
+      <select id="episode-select">
+        <option value="">-- Select an episode --</option>
+      </select>
+
+
+
+      <!--TV show section-->
+      <section id="episodes-container" class="episodes-container">
 
       </section>
-    </main> 
+  </main>
 
-    <footer>
-      <p>
-        Data provided by
-        <a href="https://www.tvmaze.com/api#licensing">
-          TVMaze.com
-        </a>
-      </p>
-    </footer>
-    <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
-    <script defer src="episodes.js"></script>
+  <footer>
+    <p>
+      Data provided by
+      <a href="https://www.tvmaze.com/api#licensing">
+        TVMaze.com
+      </a>
+    </p>
+  </footer>
+  <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
+  <script defer src="episodes.js"></script>
 
-    <!-- Loads YOUR javascript code -->
-    <script defer src="script.js"></script>
+  <!-- Loads YOUR javascript code -->
+  <script defer src="level200.js"></script>
 
-      <!--adding credit to origin data sources -->
+  <!--adding credit to origin data source -->
 
-  </body>
+</body>
+
 </html>
