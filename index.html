@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TV Show Project |sarawone </title>
-  <link href="style.css" rel="stylesheet" />
+  <link href="level200.css" rel="stylesheet" />
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
 </head>
 
@@ -16,24 +16,34 @@
   </header>
 
   <main>
-    <!-- search box and select box section-->
+    <!-- search box and select boxes section-->
     <section id="controls">
-      <label for="search-input">Search Episodes:</label>
-      <input type="search" id="search-input" placeholder="Search by name or summary" />
+
+      <label for="show-select">Choose a show:</label>
+      <select id="show-select">
+        <option value="">Select a show</option>
+      </select>
 
       <label for="episode-select">Jump to episode:</label>
       <select id="episode-select">
         <option value="">-- Select an episode --</option>
       </select>
+
+      <label for="search-input">Search Episodes:</label>
+      <input type="search" id="search-input" placeholder="Search by name or summary" />
+
+      <!--for status-->
+      <div id="status-message"></div>
+
     </section>
 
-    <!--for status-->
-    <div id="status-message"></div>
 
-      <!--TV show section-->
-      <section id="episodes-container" class="episodes-container">
 
-      </section>
+
+    <!--TV show section-->
+    <section id="episodes-container" class="episodes-container">
+
+    </section>
   </main>
 
   <footer>
@@ -44,9 +54,9 @@
       </a>
     </p>
   </footer>
- 
+
   <!-- Loads YOUR javascript code -->
-  <script defer src="script.js"></script>
+  <script defer src="level400.js"></script>
 
   <!--adding credit to origin data source -->
 
