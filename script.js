@@ -1,16 +1,14 @@
 //You can edit ALL of the code here
 function setup() {
   fetchAllShows();
-  showSelect.addEventListener("change", handleShowChange);
-  searchInput.addEventListener("input", handleSearch);
   document.getElementById('controls').style.display = 'none';  // hiding controls from episode
-  container.style.display = 'none'; // hiding episode display
+
 }
 
 let episodes = []; // for episode
 let allShows = []; // for shows
 let episodesCache = {};
-const showSelect = document.getElementById("show-select");
+
 const container = document.getElementById("episodes-container");
 const searchInput = document.getElementById("search-input");
 const selectEl = document.getElementById("episode-select");
@@ -92,29 +90,60 @@ function renderShowsList(shows){
   title.addEventListener('click', () => {
   const showId = title.dataset.id;
   handleShowChange(showId);
+  showSearchInput.style.display ='none';
   showListSection.style.display = 'none';
-  container.style.display = 'block';
-  document.getElementById('controls').style.display = 'block';
-  document.getElementById('show-select-label').style.display = 'none';
-  document.getElementById('show-select').style.display ='none';
+  document.getElementById('controls').style.display = 'flex';
+  container.style.display = 'grid';
+  
     });
 
   });
  }
 
-/*
-// Sort shows alphabetically (case-insensitive)
-  allShows = data.sort(function (a, b) {
-    const nameA = a.name.toLowerCase();
-    const nameB = b.name.toLowerCase();
-    return nameA.localeCompare(nameB);
-  });
-   // After shows are fetched, automatically select the first show
-    if (allShows.length > 0) {
-      showSelect.value = allShows[0].id; // Set the first show as selected
-      handleShowChange(); // Fetch and display episodes for the first show
+ // Fetch episodes for selected show
+async function handleShowChange(showId) {
+  if (!showId) return;
+
+  // If episodes already fetched, use from cache
+  if (episodesCache[showId]) {
+    episodes = episodesCache[showId];
+  } else {
+    try {
+      showStatus('Loading episodes...');
+      const res = await fetch(`https://api.tvmaze.com/shows/${showId}/episodes`);
+      const data = await res.json();
+      episodesCache[showId] = data; // Save to cache
+      episodes = data;
+      clearStatus();
+    } catch (error) {
+      showStatus('Failed to load episodes. Try again.');
+      return;
     }
-*/
+  }
+  
+  selectEl.innerHTML = '<option value="">Select an episode</option>';
+  populateSelect(); // Populate episode selector
+  renderEpisodes(episodes); // Render all episodes
+  document.getElementById('controls').style.display = 'flex';
+  container.style.display = 'grid';
+  showSearchInput.style.display = 'none';
+}
+
+
+// Go back to shows listing
+function goBackToShows() {
+  container.style.display = 'none';
+  showListSection.style.display = 'grid';
+  document.getElementById('controls').style.display = 'none';
+  showSearchInput.style.display = 'block';
+  showSearchInput.value = '';      // Clear any previous search term
+  renderShowsList(allShows);
+
+}
+
+backToShowsBtn.addEventListener('click', goBackToShows);
+
+
 
  // Populate show dropdown 
  allShows.forEach((show) => {
@@ -124,35 +153,6 @@ function renderShowsList(shows){
   showSelect.appendChild(option);
 });
 
-// Fetch episodes for selected show
-async function handleShowChange() {
-  const showId = showSelect.value; // Get selected show ID
-  if (!showId) return;
-
-  // If episodes already fetched, use from cache
-  if (episodesCache[showId]) {
-    episodes = episodesCache[showId];
-  } else {
-    try {
-      showStatus("Loading episodes...");
-      const res = await fetch(
-        `https://api.tvmaze.com/shows/${showId}/episodes`
-      );
-      const data = await res.json();
-      episodesCache[showId] = data; // Save to cache
-      episodes = data;
-      clearStatus();
-    } catch (error) {
-      showStatus("Failed to load episodes. Try again.");
-      return;
-    }
-  }
-  selectEl.innerHTML = '<option value="">Select an episode</option>';
-
-  searchInput.value = ""; // Clear any previous search term
-  populateSelect(); // Fill episode dropdown
-  renderEpisodes(episodes); // Show episodes
-}
 
 // adding option values in select box
 function populateSelect() {
@@ -181,8 +181,12 @@ function handleSearch() {
   });
   renderEpisodes(filtered);
 }
+
+
+
 // adding listener for search box
 searchInput.addEventListener("input", handleSearch);
+
 
 //filtering select box
 function handleSelect() {
@@ -201,6 +205,20 @@ function handleSelect() {
 
 //adding listener for select box
 selectEl.addEventListener("change", handleSelect);
+
+//handle show search
+function handleShowSearch() {
+  const term = showSearchInput.value.trim().toLowerCase();
+  const filtered = allShows.filter(show =>
+    show.name.toLowerCase().includes(term) ||
+    show.genres.join(',').toLowerCase().includes(term) ||
+    show.summary.toLowerCase().includes(term)
+  );
+  renderShowsList(filtered);
+ }
+
+ showSearchInput.addEventListener("input", handleShowSearch);
+
 
 // format the season & episode
 function formatEpisodeCode(season, number) {
